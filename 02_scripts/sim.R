@@ -1,44 +1,50 @@
+library(tidyverse)
 
+# INPUTS ----
 lf_df <- read_csv("01_data/01_clean/lf_df.csv")
+tm_df <- read_csv("01_data/01_clean/tm.csv")
 
-# INPUT
-# 2016
-base_pop <- 24195701
+# initial population
+starting_pop <- 24195701  
+# sim years
+years <- 2017:2023 
+# growth rates for each year from 2017 to 2023
+growth_rates <- c(0.016310046, 0.015814995, 0.01513017, 0.012338956, 0.009779412, 0.009888628, 0.009997092 )
 
-pop_growth <- tibble(year = 2017:2023,
-                     gr_rate = c( 
-                                  #0.0158
-                                  0.0163
-                                 ,0.0158
-                                 ,0.0151
-                                 ,0.0123
-                                 ,0.0098
-                                 ,0.0099
-                                 ,0.0100
-                     ))
-  
-  
-# 
-for(i in 2017: 2023){
-  pop <- 
+# POPULATION SIMULATION ----
+
+# The years to simulate
+pop <- numeric(length(years))  # Empty vector to store results
+
+# first year (2017)
+pop[1] <- starting_pop
+
+# Simulate the population for each subsequent year
+for (i in 2:c(length(years) + 1)) {
+  pop[i] <- pop[i - 1] * (1 + growth_rates[i - 1])
 }
 
-
-# Define initial population and growth rates
-initial_population <- 24195701
-growth_rates <- c(0.0163, 0.0158, 0.0151, 0.0123, 0.0098, 0.0099, 0.0100)
-years <- 2017:2023
-
-# Calculate population for each year
-populations <- c(initial_population)
-for (rate in growth_rates) {
-  populations <- c(populations, tail(populations, 1) * (1 + rate))
-  print(populations)
-}
-
-# Create a data frame with the results
-df <- data.frame(
-  Year = years,
-  Population = populations,
-  GrowthRate = c(0, growth_rates)  # Add 0 for the initial year
+# Combine the results into a data frame
+pop_df <- data.frame(
+  year = c(years[1]-1,years), # either add the starting year or
+  pop = round(pop)  # remove starting year pop [-1]
 )
+#pop_df |> clipr::write_clip()
+
+# LF
+#pop_15yr_over_rate <- c( 0.81,0.81,0.81,0.81,0.81,0.81,0.83)
+pop_15yr_over_rate <- tm_df$over_15yr_rate
+  
+pop_df %>%
+  slice(-1) |> 
+  mutate(over_15 = pop * pop_15yr_over_rate[-1])
+
+######### other
+data.frame(
+  year = years, # either add the starting year or
+  # pop = round(pop) , # remove starting year pop [-1]
+  gr = growth_rates
+) |> 
+  clipr::write_clip()
+
+
