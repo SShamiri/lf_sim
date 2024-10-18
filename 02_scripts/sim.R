@@ -1,15 +1,20 @@
 library(tidyverse)
 
 # INPUTS ----
-lf_df <- read_csv("01_data/01_clean/lf_df.csv")
-tm_df <- read_csv("01_data/01_clean/tm.csv")
+# transition matrix
+tm_df <- read_csv("01_data/02_tm/tm_nat.csv")
 
 # initial population
 starting_pop <- 24195701  
-# sim years
+# year for simulation
 years <- 2017:2023 
+
+# base_sim
+tm_df <- tm_df |> 
+  filter(!is.na(growth_rate))
+
 # growth rates for each year from 2017 to 2023
-growth_rates <- c(0.016310046, 0.015814995, 0.01513017, 0.012338956, 0.009779412, 0.009888628, 0.009997092 )
+#growth_rates <- c(0.016310046, 0.015814995, 0.01513017, 0.012338956, 0.009779412, 0.009888628, 0.009997092)
 
 # POPULATION SIMULATION ----
 
@@ -20,8 +25,9 @@ pop <- numeric(length(years))  # Empty vector to store results
 pop[1] <- starting_pop
 
 # Simulate the population for each subsequent year
-for (i in 2:c(length(years) + 1)) {
-  pop[i] <- pop[i - 1] * (1 + growth_rates[i - 1])
+for (i in 2:c(length(years)+1) ) {
+#pop[i] <- pop[i - 1] * (1 + growth_rates[i - 1])
+  pop[i] <- pop[i - 1] * (1 + tm_df$growth_rate[i])
 }
 
 # Combine the results into a data frame
@@ -31,13 +37,20 @@ pop_df <- data.frame(
 )
 #pop_df |> clipr::write_clip()
 
-# LF
-#pop_15yr_over_rate <- c( 0.81,0.81,0.81,0.81,0.81,0.81,0.83)
-pop_15yr_over_rate <- tm_df$over_15yr_rate
-  
-pop_df %>%
-  slice(-1) |> 
-  mutate(over_15 = pop * pop_15yr_over_rate[-1])
+# national LF
+nat_df <-pop_df |> 
+  left_join(tm_df, join_by(year)) |> 
+  mutate(pop_15yr_over = pop * over_15yr_rate ,
+         lf = pop_15yr_over * part_rate,
+         emp = lf * emp_rate,
+         unemp = lf * unemp_rate,
+         nilf = pop_15yr_over - lf
+         ) %>%
+  select(year, !contains("rate"))
+
+#nat_df |> clipr::write_clip()
+
+
 
 ######### other
 data.frame(
@@ -46,5 +59,3 @@ data.frame(
   gr = growth_rates
 ) |> 
   clipr::write_clip()
-
-
