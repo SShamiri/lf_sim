@@ -89,4 +89,64 @@ sample_list <- lapply(split_indices, function(indices) data[indices, ])
 # View the result
 sample_list
 
+#########################
 
+dd <- function(pop_df, dep_df){
+  sample_sizes <- dep_df$dep
+  # Step 1: Randomly shuffle the row indices
+  shuffled_indices <- sample(nrow(pop_df))
+  
+  # Step 2: Split the data into 5 samples based on sample sizes
+  # Use the `split` and `cumsum` functions to split based on cumulative sizes
+  split_indices <- split(shuffled_indices, 
+                         cut(seq_along(shuffled_indices), 
+                             breaks = cumsum(c(0, sample_sizes)), 
+                             labels = dep_df$dest_gccsa))
+ 
+  # Step 3: Extract each sample based on the indices
+  sample_list <- lapply(split_indices, function(indices) pop_smp[indices, ])
+  
+  # View the result
+  sample_list |> bind_rows(.id = 'dest')
+  
+}
+##
+
+ pop_smp <- dep_df |> 
+  filter(flag_death == 0, flag_dep == 0) |> 
+  select(id, year, gccsa_code, gender, age) |> 
+  filter(age == 38, gender == 'female', gccsa_code == '1GSYD')
+  
+ 
+ 
+ dep_smp <- nim_gccsa |>
+   filter(year == 2022) |> 
+   select(year, gccsa_code, gender, age, dest_gccsa, pop, dep = value) |>
+   mutate(dep = ifelse(gccsa_code == dest_gccsa, pop, dep)) |> 
+   filter(age == 38, gender == 'female', gccsa_code == '1GSYD') |> 
+   filter(dep > 0)
+   
+
+
+# Define sample sizes (make sure they sum up to the total number of rows)
+sample_sizes <- dep_smp$dep
+# Check that the sum of sample_sizes equals the number of rows
+stopifnot(sum(sample_sizes) == nrow(pop_smp))
+
+# Step 1: Randomly shuffle the row indices
+shuffled_indices <- sample(nrow(pop_smp))
+
+# Step 2: Split the data into 5 samples based on sample sizes
+# Use the `split` and `cumsum` functions to split based on cumulative sizes
+split_indices <- split(shuffled_indices, 
+                       cut(seq_along(shuffled_indices), 
+                           breaks = cumsum(c(0, sample_sizes)), 
+                           labels = dep_smp$dest_gccsa))
+
+# Step 3: Extract each sample based on the indices
+sample_list <- lapply(split_indices, function(indices) pop_smp[indices, ])
+
+# View the result
+sample_list |> bind_rows(.id = 'dest')
+
+                      
