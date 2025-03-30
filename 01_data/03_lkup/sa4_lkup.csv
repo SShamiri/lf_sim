@@ -1,0 +1,108 @@
+sa4_code,sa4_name,gccsa_code,gccsa_name,state_code,state_name,state_abrev
+101,Capital Region,1RNSW,Rest of NSW,1,New South Wales,NSW
+102,Central Coast,1GSYD,Greater Sydney,1,New South Wales,NSW
+103,Central West,1RNSW,Rest of NSW,1,New South Wales,NSW
+104,Coffs Harbour - Grafton,1RNSW,Rest of NSW,1,New South Wales,NSW
+105,Far West and Orana,1RNSW,Rest of NSW,1,New South Wales,NSW
+106,Hunter Valley exc Newcastle,1RNSW,Rest of NSW,1,New South Wales,NSW
+107,Illawarra,1RNSW,Rest of NSW,1,New South Wales,NSW
+108,Mid North Coast,1RNSW,Rest of NSW,1,New South Wales,NSW
+109,Murray,1RNSW,Rest of NSW,1,New South Wales,NSW
+110,New England and North West,1RNSW,Rest of NSW,1,New South Wales,NSW
+111,Newcastle and Lake Macquarie,1RNSW,Rest of NSW,1,New South Wales,NSW
+112,Richmond - Tweed,1RNSW,Rest of NSW,1,New South Wales,NSW
+113,Riverina,1RNSW,Rest of NSW,1,New South Wales,NSW
+114,Southern Highlands and Shoalhaven,1RNSW,Rest of NSW,1,New South Wales,NSW
+115,Sydney - Baulkham Hills and Hawkesbury,1GSYD,Greater Sydney,1,New South Wales,NSW
+116,Sydney - Blacktown,1GSYD,Greater Sydney,1,New South Wales,NSW
+117,Sydney - City and Inner South,1GSYD,Greater Sydney,1,New South Wales,NSW
+118,Sydney - Eastern Suburbs,1GSYD,Greater Sydney,1,New South Wales,NSW
+119,Sydney - Inner South West,1GSYD,Greater Sydney,1,New South Wales,NSW
+120,Sydney - Inner West,1GSYD,Greater Sydney,1,New South Wales,NSW
+121,Sydney - North Sydney and Hornsby,1GSYD,Greater Sydney,1,New South Wales,NSW
+122,Sydney - Northern Beaches,1GSYD,Greater Sydney,1,New South Wales,NSW
+123,Sydney - Outer South West,1GSYD,Greater Sydney,1,New South Wales,NSW
+124,Sydney - Outer West and Blue Mountains,1GSYD,Greater Sydney,1,New South Wales,NSW
+125,Sydney - Parramatta,1GSYD,Greater Sydney,1,New South Wales,NSW
+126,Sydney - Ryde,1GSYD,Greater Sydney,1,New South Wales,NSW
+127,Sydney - South West,1GSYD,Greater Sydney,1,New South Wales,NSW
+128,Sydney - Sutherland,1GSYD,Greater Sydney,1,New South Wales,NSW
+197,Migratory - Offshore - Shipping (NSW),19799,Migratory - Offshore - Shipping (NSW),1,New South Wales,NSW
+199,No usual address (NSW),19499,No usual address (NSW),1,New South Wales,NSW
+201,Ballarat,2RVIC,Rest of Vic.,2,Victoria,VIC
+202,Bendigo,2RVIC,Rest of Vic.,2,Victoria,VIC
+203,Geelong,2RVIC,Rest of Vic.,2,Victoria,VIC
+204,Hume,2RVIC,Rest of Vic.,2,Victoria,VIC
+205,Latrobe - Gippsland,2RVIC,Rest of Vic.,2,Victoria,VIC
+206,Melbourne - Inner,2GMEL,Greater Melbourne,2,Victoria,VIC
+207,Melbourne - Inner East,2GMEL,Greater Melbourne,2,Victoria,VIC
+208,Melbourne - Inner South,2GMEL,Greater Melbourne,2,Victoria,VIC
+209,Melbourne - North East,2GMEL,Greater Melbourne,2,Victoria,VIC
+210,Melbourne - North West,2GMEL,Greater Melbourne,2,Victoria,VIC
+211,Melbourne - Outer East,2GMEL,Greater Melbourne,2,Victoria,VIC
+212,Melbourne - South East,2GMEL,Greater Melbourne,2,Victoria,VIC
+213,Melbourne - West,2GMEL,Greater Melbourne,2,Victoria,VIC
+214,Mornington Peninsula,2GMEL,Greater Melbourne,2,Victoria,VIC
+215,North West,2RVIC,Rest of Vic.,2,Victoria,VIC
+216,Shepparton,2RVIC,Rest of Vic.,2,Victoria,VIC
+217,Warrnambool and South West,2RVIC,Rest of Vic.,2,Victoria,VIC
+297,Migratory - Offshore - Shipping (Vic.),29799,Migratory - Offshore - Shipping (Vic.),2,Victoria,VIC
+299,No usual address (Vic.),29499,No usual address (Vic.),2,Victoria,VIC
+301,Brisbane - East,3GBRI,Greater Brisbane,3,Queensland,QLD
+302,Brisbane - North,3GBRI,Greater Brisbane,3,Queensland,QLD
+303,Brisbane - South,3GBRI,Greater Brisbane,3,Queensland,QLD
+304,Brisbane - West,3GBRI,Greater Brisbane,3,Queensland,QLD
+305,Brisbane Inner City,3GBRI,Greater Brisbane,3,Queensland,QLD
+306,Cairns,3RQLD,Rest of Qld,3,Queensland,QLD
+307,Darling Downs - Maranoa,3RQLD,Rest of Qld,3,Queensland,QLD
+308,Central Queensland,3RQLD,Rest of Qld,3,Queensland,QLD
+309,Gold Coast,3RQLD,Rest of Qld,3,Queensland,QLD
+310,Ipswich,3GBRI,Greater Brisbane,3,Queensland,QLD
+311,Logan - Beaudesert,3GBRI,Greater Brisbane,3,Queensland,QLD
+312,Mackay - Isaac - Whitsunday,3RQLD,Rest of Qld,3,Queensland,QLD
+313,Moreton Bay - North,3GBRI,Greater Brisbane,3,Queensland,QLD
+314,Moreton Bay - South,3GBRI,Greater Brisbane,3,Queensland,QLD
+315,Queensland - Outback,3RQLD,Rest of Qld,3,Queensland,QLD
+316,Sunshine Coast,3RQLD,Rest of Qld,3,Queensland,QLD
+317,Toowoomba,3RQLD,Rest of Qld,3,Queensland,QLD
+318,Townsville,3RQLD,Rest of Qld,3,Queensland,QLD
+319,Wide Bay,3RQLD,Rest of Qld,3,Queensland,QLD
+397,Migratory - Offshore - Shipping (Qld),39799,Migratory - Offshore - Shipping (Qld),3,Queensland,QLD
+399,No usual address (Qld),39499,No usual address (Qld),3,Queensland,QLD
+401,Adelaide - Central and Hills,4GADE,Greater Adelaide,4,South Australia,SA
+402,Adelaide - North,4GADE,Greater Adelaide,4,South Australia,SA
+403,Adelaide - South,4GADE,Greater Adelaide,4,South Australia,SA
+404,Adelaide - West,4GADE,Greater Adelaide,4,South Australia,SA
+405,Barossa - Yorke - Mid North,4RSAU,Rest of SA,4,South Australia,SA
+406,South Australia - Outback,4RSAU,Rest of SA,4,South Australia,SA
+407,South Australia - South East,4RSAU,Rest of SA,4,South Australia,SA
+497,Migratory - Offshore - Shipping (SA),49799,Migratory - Offshore - Shipping (SA),4,South Australia,SA
+499,No usual address (SA),49499,No usual address (SA),4,South Australia,SA
+501,Bunbury,5RWAU,Rest of WA,5,Western Australia,WA
+502,Mandurah,5GPER,Greater Perth,5,Western Australia,WA
+503,Perth - Inner,5GPER,Greater Perth,5,Western Australia,WA
+504,Perth - North East,5GPER,Greater Perth,5,Western Australia,WA
+505,Perth - North West,5GPER,Greater Perth,5,Western Australia,WA
+506,Perth - South East,5GPER,Greater Perth,5,Western Australia,WA
+507,Perth - South West,5GPER,Greater Perth,5,Western Australia,WA
+509,Western Australia - Wheat Belt,5RWAU,Rest of WA,5,Western Australia,WA
+510,Western Australia - Outback (North),5RWAU,Rest of WA,5,Western Australia,WA
+511,Western Australia - Outback (South),5RWAU,Rest of WA,5,Western Australia,WA
+597,Migratory - Offshore - Shipping (WA),59799,Migratory - Offshore - Shipping (WA),5,Western Australia,WA
+599,No usual address (WA),59499,No usual address (WA),5,Western Australia,WA
+601,Hobart,6GHOB,Greater Hobart,6,Tasmania,TAS
+602,Launceston and North East,6RTAS,Rest of Tas.,6,Tasmania,TAS
+603,South East,6RTAS,Rest of Tas.,6,Tasmania,TAS
+604,West and North West,6RTAS,Rest of Tas.,6,Tasmania,TAS
+697,Migratory - Offshore - Shipping (Tas.),69799,Migratory - Offshore - Shipping (Tas.),6,Tasmania,TAS
+699,No usual address (Tas.),69499,No usual address (Tas.),6,Tasmania,TAS
+701,Darwin,7GDAR,Greater Darwin,7,Northern Territory,NT
+702,Northern Territory - Outback,7RNTE,Rest of NT,7,Northern Territory,NT
+797,Migratory - Offshore - Shipping (NT),79799,Migratory - Offshore - Shipping (NT),7,Northern Territory,NT
+799,No usual address (NT),79499,No usual address (NT),7,Northern Territory,NT
+801,Australian Capital Territory,8ACTE,Australian Capital Territory,8,Australian Capital Territory,ACT
+897,Migratory - Offshore - Shipping (ACT),89799,Migratory - Offshore - Shipping (ACT),8,Australian Capital Territory,ACT
+899,No usual address (ACT),89499,No usual address (ACT),8,Australian Capital Territory,ACT
+901,Other Territories,9OTER,Other Territories,9,Other Territories,OTR
+997,Migratory - Offshore - Shipping (OT),99799,Migratory - Offshore - Shipping (OT),9,Other Territories,OTR
+999,No usual address (OT),99499,No usual address (OT),9,Other Territories,OTR
