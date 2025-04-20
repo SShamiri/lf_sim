@@ -52,19 +52,40 @@ pop_flow_df <- state_flow |>
     state_pop,join_by(grp_id, lf_status)
     ) 
 
-ids = unique(pop_flow_df$grp_id)
-lst = list()
-for(i in 1: length(ids)){
-  grp_tmp <- pop_flow_df |> 
-    filter(grp_id == ids[i])
-  # targets to 
-  trg =  rowSums(grp_tmp[, 3:5])
-  pop = grp_tmp |> pull(pop)
-  
-  lst[[i]] = ipf_balancing(grp_tmp[,c(-1, -6)], pop , trg) |> 
-    mutate(grp_id = ids[i])
+# Adjust the totals using IPF balancing 
+lst = pop_flow_df |>  
+  #filter(grp_id == id) |> 
+  group_by(grp_id) |> 
+  group_split() |> 
+  map(~ {
+    # pop
+    tlt_pop <- .x |> filter(grp_id == .x$grp_id[1]) |> pull(pop)
+    #tlt_pop
+    tlt_col <- .x |> filter(grp_id == .x$grp_id[1]) |>
+      select(-pop) |>
+      summarise(across(where(is.numeric), sum)) |> unlist()
+    #
+    dat <- .x |> select(lf_status, employed, unemployed, nilf )
+    ipf_balancing(dat, tlt_pop, tlt_col) |> mutate(grp_id = .x$grp_id[1])
+    
+  }) 
 
-}
+#lst |> bind_rows()
+
+### or with loop
+# ids = unique(pop_flow_df$grp_id)
+# lst = list()
+# for(i in 1: length(ids)){
+#   grp_tmp <- pop_flow_df |> 
+#     filter(grp_id == ids[i])
+#   # targets to 
+#   trg =  rowSums(grp_tmp[, 3:5])
+#   pop = grp_tmp |> pull(pop)
+#   
+#   lst[[i]] = ipf_balancing(grp_tmp[,c(-1, -6)], pop , trg) |> 
+#     mutate(grp_id = ids[i])
+# 
+# }
 
 # pop_df <- pop_df %>%
 #   mutate(grp_id2 = paste0(grp_id, "_", lf_status))
@@ -84,6 +105,7 @@ df_adj <- lst |> bind_rows() |>
 
 df_adj 
 
+# Randomly split
 out_df <- pop_df |>   
 group_by(grp_id2) %>%
   group_split() %>%
