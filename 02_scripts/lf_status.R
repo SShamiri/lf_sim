@@ -1,5 +1,5 @@
 library(tidyverse)
-
+source("02_scripts/ipf_balancing.R")
 
 DATA_DIR <-file.path("01_data") 
 LKUP_DIR <- file.path(DATA_DIR, "03_lkup")
@@ -28,114 +28,74 @@ pop_df <- pop_df |>
     )
   ) |> 
   left_join(gccsa_lkup, join_by(gccsa_code)) |>
-  mutate(grp_id = paste0(year,state_abrev, gender, age_10yr))
+  mutate(
+    grp_id = paste0(year,state_abrev, gender, age_10yr),
+    grp_id2 = paste0(grp_id, "_", lf_status)
+         )
 
 state_pop <- pop_df |> 
   group_by(grp_id, lf_status) |> 
   summarise(pop = n(), .groups = 'drop')
 
-state_flow <- flow_df |> 
+state_flow <- flow_df |>
+  filter(year == 2022) |>
   mutate(grp_id = paste0(year,state_abrev, gender, age_10yr)) |> 
   select(grp_id, lf_status, flow, value_flow)
 
-# check if 2022 pop in pop and flow are the same
-sum(state_pop$pop) # 21,245,034
-sum(flow_df[flow_df$year == 2022,]$value_flow) # 21,245,013
+####
+#id = "2022ACTfemale15-24 years"
+#id = "2022ACTmale15-24 years"
 
-# example ----
-grp_id = "2022QLDfemale15-24 years"
-
-# targets
-trg_value <- state_flow |> 
-  filter(grp_id == !!grp_id, lf_status == flow ) |> 
-  pull(value_flow)
-
-trg_name <- state_flow |> 
-  filter(grp_id == !!grp_id, lf_status == flow ) |> 
-  pull(flow)
-
-names(trg_value) <- trg_name
-
-trg_df <- state_pop |> 
-  filter(grp_id == !!grp_id) |> 
+pop_flow_df <- state_flow |> 
+  pivot_wider(names_from = flow, values_from = value_flow) |>
   left_join(
-    state_flow |> 
-      filter(grp_id == !!grp_id ),
-    join_by(grp_id, lf_status)
-  ) |> 
-  group_by(grp_id, flow) |>
-  mutate(
-    prop = value_flow/sum(value_flow),
-    smpl = case_when(
-      flow == "employed" ~ prop * trg_value['employed'],
-      flow == "unemployed" ~ prop * trg_value['unemployed'],
-      flow == "nilf" ~ prop * trg_value['nilf'],
-    ),
-    smpl = round(smpl,0)
-  ) |>
-  ungroup() |> 
-  arrange(flow)
+    state_pop,join_by(grp_id, lf_status)
+    ) 
 
-# Flow to employed
-flow_to_name <- "employed"
-emp_smpl <- trg_df |> 
-  filter(flow == !!flow_to_name) |>
-  mutate(smpl = ifelse(smpl > pop, round(pop * prop, 0), smpl)) |> # this needs to be check  
-  # Perhaps to reach the target take more from nilf
-  pull(smpl)
-
-emp_lst = list()
-for(i in 1:length(emp_smpl)){
-  emp_lst[[i]] <- pop_df |> 
-                  filter(grp_id == !!grp_id, lf_status == trg_name[i]) |> 
-                  sample_n(size = emp_smpl[i]) |>
-                  mutate(flow_to = !!flow_to_name)
-}
-emp_df <- bind_rows(emp_lst)
-
-# Flow to unemployed
-flow_to_name <- "unemployed"
-unemp_smpl <- trg_df |> 
-  filter(flow == !!flow_to_name) |>
-  mutate(smpl = ifelse(smpl > pop, round(pop * prop, 0), smpl)) |> # this needs to be check  
-  # Perhaps to reach the target take more from nilf
-  pull(smpl)
-
-unemp_lst = list()
-for(i in 1:length(unemp_smpl)){
-  unemp_lst[[i]] <- pop_df |> 
-            filter(grp_id == !!grp_id, lf_status == trg_name[i], !id %in% emp_df$id) |> 
-            sample_n(size = unemp_smpl[i]) |>
-            mutate(flow_to = !!flow_to_name) 
-  }
-unemp_df <- bind_rows(unemp_lst)
-
-# put grp together emp, unemp and nilf
-grp_df_tmp <- bind_rows(emp_df, unemp_df)
-grp_df <- pop_df |> 
-            filter(grp_id == !!grp_id) |>
-            left_join(grp_df_tmp |> select(id, flow_to), join_by(id)) |>
-            mutate(flow_to = ifelse(is.na(flow_to), "nilf", flow_to))
+ids = unique(pop_flow_df$grp_id)
+lst = list()
+for(i in 1: length(ids)){
+  grp_tmp <- pop_flow_df |> 
+    filter(grp_id == ids[i])
+  # targets to 
+  trg =  rowSums(grp_tmp[, 3:5])
+  pop = grp_tmp |> pull(pop)
   
-grp_df
+  lst[[i]] = ipf_balancing(grp_tmp[,c(-1, -6)], pop , trg) |> 
+    mutate(grp_id = ids[i])
 
-### end
-pop_df |>
-  filter(grp_id == !!grp_id) |>
-  left_join(grp_df_tmp |> select(id, flow_to), join_by(id)) |>
-  mutate(flow_to = ifelse(is.na(flow_to), "nilf", flow_to)) |>
-  group_by(grp_id, flow_to) |>
-  summarise(trgt = n(), .groups = 'drop') |>
-  pivot_wider(names_from = flow_to, values_from = trgt) |>
-  mutate(
-    lf = employed + unemployed,
-    unemp_rate = unemployed/lf
-  )
+}
+
+# pop_df <- pop_df %>%
+#   mutate(grp_id2 = paste0(grp_id, "_", lf_status))
+
+df_adj <- lst |> bind_rows() |>
+            left_join(state_pop, join_by(lf_status, grp_id)) |>
+            mutate(
+              across(where(is.numeric), round),
+              tlt = employed + unemployed + nilf,
+              chk = ifelse(pop != tlt, 1, 0),
+              nilf = ifelse(chk == 1, pop -(employed + unemployed), nilf),
+              grp_id2 = paste0(grp_id, "_", lf_status)
+            ) |>
+            relocate(grp_id2) |>
+            select(-pop, -tlt, -chk) |>
+            pivot_longer(!c(grp_id,grp_id2, lf_status), names_to = "dest", values_to = "n")
+
+df_adj 
+
+out_df <- pop_df |>   
+group_by(grp_id2) %>%
+  group_split() %>%
+  map_df(~ {
+    group_dests <- df_adj |> 
+    filter(grp_id2 == .x$grp_id2[1]) 
+    dest_vec <- rep(group_dests$dest, group_dests$n)
+    .x %>%
+      mutate(dest = sample(dest_vec))
+  })
+ 
+out_df 
 
 
-trg_df |> 
-  filter(flow == !!flow_to_name) |>
-  mutate(smpl = ifelse(smpl > pop, round(pop * prop, 0), smpl))
-
-pop_df |> 
-  filter(grp_id == !!grp_id, lf_status == trg_name[1], !id %in% emp_df$id)
+pop_df |> filter(grp_id2 == "2022ACTfemale25-34 years_unemployed")
