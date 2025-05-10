@@ -1,7 +1,7 @@
 # Load necessary library
 library(tidyverse)
 
-#### CASE 1
+##### CASE 1
 # Create the first data frame (individuals)
 individuals <- data.frame(
   id = c(paste0("A-", 1:9), paste0("B-", 1:7)),
